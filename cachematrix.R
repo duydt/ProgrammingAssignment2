@@ -55,9 +55,11 @@ test<-function(){
 	##view the solve(x)
 	x
 	##Get the inverse matrix of x:
-	solve(x) %*% x
+	t<-solve(x) %*% x
 	##test the cachesolve function
 	y <- makeCacheMatrix(x)
 	z<-cacheSolve(y)
 	z
+	##check value of z and t
+	t == z
 }
