@@ -1,8 +1,3 @@
-## Put comments here that give an overall description of what your
-## functions do
-
-## Write a short comment describing this function
-
 makeCacheMatrix <- function(x = matrix()) {
 	 ## equals to NULL to indicate that the matrix is inversed already
 	 ##this, actually look like the data member of class in OOP paradigm 
@@ -51,5 +46,18 @@ cacheSolve <- function(x, ...) {
 	nm <- x$get()
 	##calculate and save inversed of nm
 	x$setInverse(solve(nm) %*% nm)
-	return (nm)
+	return (x$getInverse())
+}
+
+test<-function(){
+	x <- stats::rnorm(9)
+	dim(x) <- c(3,3)
+	##view the solve(x)
+	x
+	##Get the inverse matrix of x:
+	solve(x) %*% x
+	##test the cachesolve function
+	y <- makeCacheMatrix(x)
+	z<-cacheSolve(y)
+	z
 }
