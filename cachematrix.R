@@ -49,20 +49,18 @@ cacheSolve <- function(x, ...) {
 	##1. get normal matrix of x named nm 
 	nm <- x$get()
 	##2. calculate and save inversed of nm to x
-	x$setInverse(solve(nm) %*% nm)
+	x$setInverse(solve(nm,...))
 	return (x$getInverse())
 }
 ##this function is used to test and see how is makeCacheMatrix work?
 ##input: nothing
 ##output: the output of matrix inversion and compare the our output with solve(x) - R built-in function. The matrix as the input 
 ##for cacheSolve is generated randomly 
-test<-function(){
-        ##generate a randomly list that has 9 elements
-	x <- stats::rnorm(9)
-	##set the ncol = nrow = 3 for the list -> list turns to a matrix, size 3 x 3 ( x should be a square matrix)
-	dim(x) <- c(3,3)
-	##Get the inverse matrix of x, save the result on t
-	t <- solve(x) %*% x
+test  <- function(){
+        ##a square matrix with 4 rows and 4 columns
+	x<-rbind(c(1,3,2,1),c(0,1,-1,-1),c(0,0,1,3),c(0,0,0,1))
+	##Get the inverse matrix of x, save the result on t (using solve(x) - built-in function)
+	t <- solve(x)
 	##test makeCacheMatrix and the cachesolve function
 	##1. make cache matrix
 	y <- makeCacheMatrix(x)
@@ -72,4 +70,9 @@ test<-function(){
 	z
 	##check and compare values of z and t, it should return a square matrix with all items are TRUE
 	t == z
+	##try to calculate matrix inversion of x again -> expect to receive getting cached data message coz the matrix is inversed already
+	t <- cacheSolve(y)
+	##view values of t
+	t
 }
+
