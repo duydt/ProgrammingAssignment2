@@ -1,6 +1,9 @@
+##input: matrix x
+##output: class named makeCacheMatrix which contain information of matrix and matrix inversion
 makeCacheMatrix <- function(x = matrix()) {
 	 ## equals to NULL to indicate that the matrix is inversed already
-	 ##this, actually look like the data member of class in OOP paradigm 
+	 ##this, actually look like the data member of class in OOP paradigm
+	 ##isInversed = NULL if x is inversed otherwisre isInVersed = solve(x)
         isInversed <- NULL
         ##set value for x also assume that the matrix is inversed 
 	set <- function(b){
@@ -11,7 +14,7 @@ makeCacheMatrix <- function(x = matrix()) {
 	get <- function(){
 		return (x)
 	}	
-	##change the value of inverse which means that indicate if current matrix - x is inversed or not
+	##change the value of inverse which means that assign the value of matrix inversion - inverse to -isInversed
 	setInverse <- function(inverse){
 		isInversed <<- inverse
 	}
@@ -29,37 +32,44 @@ makeCacheMatrix <- function(x = matrix()) {
 	) 
 }
 
-
-## Write a short comment describing this function
-
+## the below function is used to calculate the inverse of instance of makeCacheMatrix named x
+##input: an instance of makeCacheMatrix named x
+##output: matrix inversion of x
 cacheSolve <- function(x, ...) {
-        ## Return a matrix that is the inverse of 'x'
-        ##used to check if the matrix has been calculated the inversation or not
+        ##Return a matrix that is the inverse of 'x'
+        ##used to check if the matrix has been calculated the Inversion  or not
+        ##get value of isInversed of x
         isInversed <- x$getInverse()
-	##if the isInversed has been calculated
+	##if the isInversed had been calculated -> no need to calculate matrix inversion anymore
 	if(!is.null(isInversed)){
 		message("getting cached data")
-		return (isInversed) 
+		return (isInversed) ##stop the calculation and return the output 
 	}
-	##calculate inversed,
+	##calculate inverse of matrix
 	##1. get normal matrix of x named nm 
 	nm <- x$get()
-	##calculate and save inversed of nm
+	##2. calculate and save inversed of nm to x
 	x$setInverse(solve(nm) %*% nm)
 	return (x$getInverse())
 }
-
+##this function is used to test and see how is makeCacheMatrix work?
+##input: nothing
+##output: the output of matrix inversion and compare the our output with solve(x) - R built-in function. The matrix as the input 
+##for cacheSolve is generated randomly 
 test<-function(){
+        ##generate a randomly list that has 9 elements
 	x <- stats::rnorm(9)
+	##set the ncol = nrow = 3 for the list -> list turns to a matrix, size 3 x 3 ( x should be a square matrix)
 	dim(x) <- c(3,3)
-	##view the solve(x)
-	x
-	##Get the inverse matrix of x:
-	t<-solve(x) %*% x
-	##test the cachesolve function
+	##Get the inverse matrix of x, save the result on t
+	t <- solve(x) %*% x
+	##test makeCacheMatrix and the cachesolve function
+	##1. make cache matrix
 	y <- makeCacheMatrix(x)
-	z<-cacheSolve(y)
+	##2. calculate inverse of y, save the reulst on z
+	z <- cacheSolve(y)
+	##3. View the ouput of inversion 
 	z
-	##check value of z and t
+	##check and compare values of z and t, it should return a square matrix with all items are TRUE
 	t == z
 }
